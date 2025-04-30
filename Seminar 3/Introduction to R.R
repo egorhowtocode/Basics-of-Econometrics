@@ -144,8 +144,7 @@ generate_weights = function(ages) {
 
 # Функция для генерации мышечной массы (зависимость от возраста) + шум
 generate_muscle_mass = function(ages) {
-  # Peak at age 30, so the curve follows a downward parabola centered at 30
-  peak_muscle = 35  # max average muscle mass at peak
+  peak_muscle = 35 
   mass = -0.01 * (ages - 35)^2 + peak_muscle
   noise = rnorm(length(ages), mean = 0, sd = 1)
   return(round(mass + noise, 1))
