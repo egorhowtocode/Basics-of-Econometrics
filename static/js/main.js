@@ -8,6 +8,7 @@ const SEGMENT_MAP = {
   'path-squeeze': 'enlightenment'
 };
 
+=======
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('question-form');
   const input = document.getElementById('question-input');
@@ -47,6 +48,9 @@ function renderResults(items) {
   if (!items || !items.length) {
     curve.classList.add('hidden');
     clearHighlight();
+=======
+  container.innerHTML = '';
+  if (!items || !items.length) {
     const card = document.createElement('div');
     card.className = 'anim-float-in bg-white dark:bg-slate-900 rounded-2xl p-6 text-center shadow';
     card.textContent = 'Sorry, we could not find anything.';
@@ -55,6 +59,7 @@ function renderResults(items) {
   }
   curve.classList.remove('hidden');
   renderPlot();
+=======
   items.forEach((item, i) => container.appendChild(createTechCard(item, i)));
 }
 
@@ -71,6 +76,7 @@ function createTechCard(item, index) {
     card.addEventListener('mouseleave', clearHighlight);
   }
 
+=======
   const btn = document.createElement('button');
   btn.id = `acc-btn-${item.id}`;
   btn.className = 'w-full flex justify-between items-center p-4 text-left focus:outline-none focus-visible:ring-2 ring-teal-500';
@@ -143,6 +149,7 @@ function clearHighlight() {
   document.querySelectorAll('.segment.highlight').forEach(el => el.classList.remove('highlight'));
 }
 
+=======
 // Toggle accordion panels so only one stays open
 function toggleAccordion(id) {
   const targetPanel = document.getElementById(`panel-${id}`);
