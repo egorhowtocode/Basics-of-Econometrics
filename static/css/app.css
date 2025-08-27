@@ -36,3 +36,22 @@
 .toast.show {
   opacity: 1;
 }
+
+/* Gartner technology maturity curve */
+.gc-segment {
+  stroke: #94a3b8; /* slate-400 */
+  stroke-width: 4;
+  fill: none;
+  opacity: 0.3;
+  transition: stroke 0.2s ease, opacity 0.2s ease;
+}
+
+.gc-segment.active {
+  stroke: #14b8a6; /* teal-500 */
+  opacity: 1;
+}
+
+.gc-label {
+  font-size: 12px;
+  fill: currentColor;
+}

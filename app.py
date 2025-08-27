@@ -13,6 +13,7 @@ TECHNOLOGIES = [
         "summary": "Learns relationships across multiple temporal periods for financial forecasting.",
         "instruments": ["Python", "R", "C++"],
         "sources": [],
+        "segment": "discovery",
     },
     {
         "id": "irf",
@@ -20,6 +21,7 @@ TECHNOLOGIES = [
         "summary": "Filters redundant signals between time periods.",
         "instruments": ["Python", "R", "C++"],
         "sources": [],
+        "segment": "trigger",
     },
     {
         "id": "lwi",
@@ -27,6 +29,7 @@ TECHNOLOGIES = [
         "summary": "Learns optimal weights to integrate forecasts from different periods.",
         "instruments": ["Python", "R", "C++"],
         "sources": [],
+        "segment": "peak",
     },
     {
         "id": "fusion",
@@ -34,6 +37,7 @@ TECHNOLOGIES = [
         "summary": "Combines heterogeneous signals/features across horizons.",
         "instruments": ["Python", "R", "C++"],
         "sources": [],
+        "segment": "trough",
     },
     {
         "id": "path-squeeze",
@@ -41,6 +45,7 @@ TECHNOLOGIES = [
         "summary": "Reduces dimensionality along temporal paths.",
         "instruments": ["Python", "R", "C++"],
         "sources": [],
+        "segment": "slope",
     },
 ]
 

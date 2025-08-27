@@ -6,6 +6,24 @@
         <button type="submit" class="px-6 py-3 rounded-xl bg-teal-600 text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 ring-teal-500">Submit</button>
     </form>
     <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Try asking the specific question about AI technologies for multi-period forecasting.</p>
+    <div id="gartner-container" class="mt-8">
+        <svg id="gartner-curve" viewBox="0 0 700 300" class="w-full h-64">
+            <path id="gc-discovery" class="gc-segment" d="M40 220 Q90 200 130 180" />
+            <path id="gc-trigger" class="gc-segment" d="M130 180 Q180 60 220 80" />
+            <path id="gc-peak" class="gc-segment" d="M220 80 Q240 60 260 90" />
+            <path id="gc-trough" class="gc-segment" d="M260 90 C300 260 330 200 360 220" />
+            <path id="gc-slope" class="gc-segment" d="M360 220 Q420 150 470 170" />
+            <path id="gc-plateau" class="gc-segment" d="M470 170 L560 170" />
+            <path id="gc-legacy" class="gc-segment" d="M560 170 Q610 190 650 210" />
+            <text x="70" y="260" class="gc-label">Discovery Nascent Research</text>
+            <text x="150" y="40" class="gc-label">Early Exploration Technology Trigger</text>
+            <text x="220" y="60" class="gc-label">Peak of Inflated Expectations</text>
+            <text x="300" y="280" class="gc-label">Trough of Disillusionment</text>
+            <text x="380" y="140" class="gc-label">Slope of Enlightenment</text>
+            <text x="480" y="150" class="gc-label">Plateau of Productivity</text>
+            <text x="580" y="230" class="gc-label">Commoditized Legacy</text>
+        </svg>
+    </div>
     <div id="results" class="mt-8 space-y-4"></div>
 </div>
 {% endblock %}
