@@ -78,7 +78,7 @@ function createTechCard(item, index) {
 
   const panel = document.createElement('div');
   panel.id = `panel-${item.id}`;
-  panel.className = 'accordion-panel px-4 pb-4';
+  panel.className = 'accordion-panel px-4';
   panel.setAttribute('role', 'region');
   panel.setAttribute('aria-labelledby', btn.id);
 
@@ -112,6 +112,7 @@ function toggleAccordion(id) {
   document.querySelectorAll('.accordion-panel').forEach(p => {
     if (p !== targetPanel) {
       p.style.maxHeight = null;
+      p.classList.remove('open');
       const b = document.getElementById(`acc-btn-${p.id.replace('panel-','')}`);
       if (b) {
         b.setAttribute('aria-expanded', 'false');
@@ -123,9 +124,11 @@ function toggleAccordion(id) {
 
   if (isOpen) {
     targetPanel.style.maxHeight = null;
+    targetPanel.classList.remove('open');
     targetBtn.setAttribute('aria-expanded', 'false');
     targetChevron.style.transform = 'rotate(0deg)';
   } else {
+    targetPanel.classList.add('open');
     targetPanel.style.maxHeight = targetPanel.scrollHeight + 'px';
     targetBtn.setAttribute('aria-expanded', 'true');
     targetChevron.style.transform = 'rotate(180deg)';
