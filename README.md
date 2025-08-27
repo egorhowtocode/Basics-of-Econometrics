@@ -1,22 +1,23 @@
-# Basics of Econometrics
+# AI Technologies Search Demo
 
-## Prerequisites
-- Python 3.8+
-- `pip` package manager
+Minimal Flask web app demonstrating a question-driven search with a modern Tailwind UI.
 
-## Installation
+## Setup
+
 ```bash
-pip install -r requirements.txt
+python -m venv .venv
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+pip install flask
 ```
 
-## Running the Server
-Start the development server:
+## Run
+
 ```bash
-python app.py
+flask --app app run --debug
 ```
 
-## Using the Interface
-1. Enter a question in the input box.
-2. Submit to receive a response.
-3. Hover over elements to reveal the technologies used.
-4. Hover over charts to highlight curves.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser.
+
+## Notes
+
+Prototype — example data only.

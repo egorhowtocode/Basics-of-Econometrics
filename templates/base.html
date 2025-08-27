@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Tech Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+    <script>window.CSRF_OFF="true";</script>
+</head>
+<body class="min-h-dvh bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col">
+    <header class="flex items-center justify-between px-4 py-3 shadow-sm bg-white dark:bg-slate-900">
+        <h1 class="text-xl font-semibold">AI Tech Explorer</h1>
+        <button id="theme-toggle" class="p-2 rounded-full focus:outline-none focus-visible:ring-2 ring-teal-500 dark:ring-offset-slate-900" aria-label="Toggle dark mode">
+            <svg id="icon-sun" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a6 6 0 100-12 6 6 0 000 12z"/><path fill-rule="evenodd" d="M12 2a.75.75 0 01.75.75V5a.75.75 0 01-1.5 0V2.75A.75.75 0 0112 2zm0 14.5a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-3.75a.75.75 0 01.75-.75zm9.25-5.75a.75.75 0 01-.75.75H17a.75.75 0 010-1.5h3.5a.75.75 0 01.75.75zM7 12a.75.75 0 01-.75.75H2.75a.75.75 0 010-1.5H6.25A.75.75 0 017 12zm10.78-6.78a.75.75 0 010 1.06L16.06 9a.75.75 0 01-1.06-1.06l1.72-1.72a.75.75 0 011.06 0zm-9.56 9.56a.75.75 0 010 1.06L6.5 19.94a.75.75 0 11-1.06-1.06l1.72-1.72a.75.75 0 011.06 0zm11.12 0a.75.75 0 00-1.06 0l-1.72 1.72a.75.75 0 101.06 1.06l1.72-1.72a.75.75 0 000-1.06zm-9.56-9.56a.75.75 0 00-1.06 0L6.5 6.5a.75.75 0 101.06 1.06l1.72-1.72a.75.75 0 000-1.06z" clip-rule="evenodd"/></svg>
+            <svg id="icon-moon" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.752 15.002A9.718 9.718 0 0112 21.75 9.75 9.75 0 0112 2.25c.54 0 1.076.043 1.607.128a.75.75 0 01.258 1.36 7.25 7.25 0 008.397 11.264.75.75 0 01.49 1.35z"/></svg>
+        </button>
+    </header>
+    <main class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="text-center text-sm py-4 text-slate-500 dark:text-slate-400">Prototype — example data only.</footer>
+    <div id="toast" class="toast"></div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
