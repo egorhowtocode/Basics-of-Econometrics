@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('question-input');
     const questionBubble = document.getElementById('question-bubble');
     const techList = document.getElementById('technology-list');
-    const responseArea = document.getElementById('response-area');
     const tooltip = document.getElementById('tooltip');
 
     form.addEventListener('submit', async (e) => {
@@ -17,26 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
         questionBubble.textContent = question;
         questionBubble.style.display = 'inline-block';
+        input.value = '';
         techList.innerHTML = '';
-        data.technologies.forEach(t => {
+        techList.style.display = 'block';
+        data.technologies.forEach((t, idx) => {
             const li = document.createElement('li');
             li.textContent = t.name;
             li.dataset.segment = t.segment;
             li.dataset.instruments = t.instruments.join(', ');
+            li.classList.add('float-in');
+            li.style.animationDelay = `${idx * 0.3}s`;
             techList.appendChild(li);
         });
-    });
-
-    responseArea.addEventListener('mouseenter', () => {
-        if (questionBubble.style.display !== 'none') {
-            techList.style.display = 'block';
-        }
-    });
-
-    responseArea.addEventListener('mouseleave', () => {
-        techList.style.display = 'none';
-        hideTooltip();
-        clearHighlight();
     });
 
     techList.addEventListener('mouseover', (e) => {
