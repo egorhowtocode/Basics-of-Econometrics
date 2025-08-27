@@ -1,35 +1,6 @@
 // Frontend logic for search, accordion, dark mode, and toasts
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('question-form');
-  const input = document.getElementById('question-input');
-  const toggleBtn = document.getElementById('theme-toggle');
-  const chatWindow = document.getElementById('chat-window');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const q = input.value;
-    try {
-      const res = await fetch('/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ q })
-      });
-      const data = await res.json();
-      renderResults(data.items);
-      showToast('Results refreshed for your question.');
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
-  toggleBtn.addEventListener('click', () => {
-    const mode = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-    setTheme(mode);
-  });
-
-  if (chatWindow) {
-    const markdownText = `
+const markdownText = `
 ## Технологии для предиктивной аналитики и их применение в улучшении продаж
 
 1. **Video marketing analytics with AI (AI-аналитика видео-маркетинга)**
@@ -62,12 +33,48 @@ document.addEventListener('DOMContentLoaded', () => {
 * Sasse, L., Nicolaisen-Soberky, E., et al. (2025). *Overview of leakage scenarios in supervised machine learning*. *Journal of Big Data*. DOI: 10.1186/...
 * Wei, C., Zelditch, B., Chen, J., & Ribeiro, A. A. S. T. (2024). *Neural Optimization for Intelligent Marketing Systems*. KDD. DOI: 10.1145/3637528...
 `;
-    if (window.marked) {
-      chatWindow.innerHTML = window.marked.parse(markdownText);
-    } else {
-      chatWindow.textContent = markdownText;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('question-form');
+  const input = document.getElementById('question-input');
+  const toggleBtn = document.getElementById('theme-toggle');
+  const chatWindow = document.getElementById('chat-window');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const q = input.value;
+    try {
+      const res = await fetch('/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ q })
+      });
+      const data = await res.json();
+      if (data.matched) {
+        if (window.marked) {
+          chatWindow.innerHTML = window.marked.parse(markdownText);
+        } else {
+          chatWindow.textContent = markdownText;
+        }
+        chatWindow.classList.remove('hidden');
+        chatWindow.classList.remove('anim-float-in');
+        void chatWindow.offsetWidth;
+        chatWindow.classList.add('anim-float-in');
+      } else {
+        chatWindow.classList.add('hidden');
+        chatWindow.innerHTML = '';
+      }
+      renderResults(data.items);
+      showToast('Results refreshed for your question.');
+    } catch (err) {
+      console.error(err);
     }
-  }
+  });
+
+  toggleBtn.addEventListener('click', () => {
+    const mode = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+    setTheme(mode);
+  });
 
   initTheme();
 });
