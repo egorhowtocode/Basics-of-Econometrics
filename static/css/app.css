@@ -16,7 +16,12 @@
 .accordion-panel {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.3s ease;
+  padding-bottom: 0;
+  transition: max-height 0.3s ease, padding-bottom 0.3s ease;
+}
+
+.accordion-panel.open {
+  padding-bottom: 1rem;
 }
 
 .toast {
