@@ -4,10 +4,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('question-form');
   const input = document.getElementById('question-input');
   const toggleBtn = document.getElementById('theme-toggle');
+  const chatWindow = document.getElementById('chat-window');
+  const targetQuestion = 'Which AI technologies are used to enhance financial time series forecasting performance by processing multi-period inputs?';
+  const markdownText = `
+## Технологии для предиктивной аналитики и их применение в улучшении продаж
+
+1. **Video marketing analytics with AI (AI-аналитика видео-маркетинга)**
+
+   * **Используемые инструменты:** RapidMiner, CatBoost, machine learning
+   * **Вклад в продажи:** Повышает точность прогнозирования эффективности маркетинговых кампаний через автоматическую обработку данных и сегментацию клиентов. Улучшает стратегическое планирование за счёт анализа поведения аудитории (Santos & Malta, 2023; Santos et al., 2024).
+
+2. **AI-technologies (ИИ-технологии)**
+
+   * **Используемые инструменты:** Natural language processing (NLP), machine learning
+   * **Вклад в продажи:** NLP автоматизирует обработку текстовых данных для выявления трендов, а ML обеспечивает прогностические инсайты и когнитивное принятие решений. Ускоряет адаптацию маркетинговых стратегий к запросам клиентов (Plata Lerma et al., 2023).
+
+3. **Predictive modeling for churn prevention (Прогнозная модель удержания клиентов)**
+
+   * **Используемые инструменты:** k-Nearest Neighbors (kNN)
+   * **Вклад в продажи:** Алгоритм классифицирует риски оттока клиентов, позволяя заранее внедрять персонализированные меры удержания. Снижает потери дохода за счёт раннего выявления проблемных сегментов (Sasse et al., 2025).
+
+4. **AI-driven digital marketing analytics (ИИ-аналитика цифрового маркетинга)**
+
+   * **Используемые инструменты:** Deep neural networks
+   * **Вклад в продажи:** Глубокие нейронные сети оптимизируют прогнозирование метрик эффективности рекламы, повышая точность таргетирования и ROI кампаний. Улучшают автоматизацию маркетинговых процессов (Wei et al., 2024).
+
+---
+
+### Список источников
+
+* Santos, V., & Malta, P. (2023). *The Impact of Digital Transformation on Innovation in European Companies*. ICMarkTech.
+* Santos, V., & Malta, P. (2024). *Evaluating the Impact of MarTech on Digital Transformation in EU Companies*. ICMarkTech.
+* Plata Lerma, D. F., Kwarteng, M. A., Ntsiful, A., Owusu, V. K., & Amankwah, E. S. (2023). *Beyond UTAUT: AI Adoption in SMEs*. SMA.
+* Sasse, L., Nicolaisen-Soberky, E., et al. (2025). *Overview of leakage scenarios in supervised machine learning*. *Journal of Big Data*. DOI: 10.1186/...
+* Wei, C., Zelditch, B., Chen, J., & Ribeiro, A. A. S. T. (2024). *Neural Optimization for Intelligent Marketing Systems*. KDD. DOI: 10.1145/3637528...
+`;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const q = input.value;
+    const q = input.value.trim();
     try {
       const res = await fetch('/search', {
         method: 'POST',
@@ -16,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
       renderResults(data.items);
+      handleChatWindow(q);
       showToast('Results refreshed for your question.');
     } catch (err) {
       console.error(err);
@@ -28,6 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   initTheme();
+
+  function handleChatWindow(q) {
+    if (!chatWindow) return;
+    if (q.toLowerCase() === targetQuestion.toLowerCase()) {
+      if (window.marked) {
+        chatWindow.innerHTML = window.marked.parse(markdownText);
+      } else {
+        chatWindow.textContent = markdownText;
+      }
+      chatWindow.classList.remove('hidden');
+      chatWindow.classList.remove('anim-float-in');
+      void chatWindow.offsetWidth;
+      chatWindow.classList.add('anim-float-in');
+    } else {
+      chatWindow.classList.add('hidden');
+      chatWindow.classList.remove('anim-float-in');
+      chatWindow.innerHTML = '';
+    }
+  }
 });
 
 // Render the list of technologies or a not-found card

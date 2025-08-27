@@ -6,6 +6,8 @@
         <button type="submit" class="px-6 py-3 rounded-xl bg-teal-600 text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 ring-teal-500">Submit</button>
     </form>
     <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Try asking the specific question about AI technologies for multi-period forecasting.</p>
+    <div id="chat-window" class="mt-6 p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 shadow max-h-96 overflow-y-auto text-sm hidden"></div>
+    <div id="results" class="mt-8 space-y-4"></div>
     <div id="gartner-container" class="mt-8">
         <svg id="gartner-curve" viewBox="0 0 700 300" class="w-full h-64">
             <path id="gc-discovery" class="gc-segment" d="M40 220 Q90 200 130 180" />
@@ -24,6 +26,5 @@
             <text x="580" y="230" class="gc-label">Commoditized Legacy</text>
         </svg>
     </div>
-    <div id="results" class="mt-8 space-y-4"></div>
 </div>
 {% endblock %}
