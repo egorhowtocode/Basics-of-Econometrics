@@ -1,31 +1,63 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
-TECH_RESPONSES = {
-    "Which AI technologies are used to enhance financial time series forecasting performance by processing multi-period inputs?": [
-        {"name": "Multi-period Learning Framework (MLF)", "segment": "discovery"},
-        {"name": "Inter-period Redundancy Filtering (IRF)", "segment": "tech-trigger"},
-        {"name": "Learnable Weighted-average Integration (LWI)", "segment": "hype-peak"},
-        {"name": "Fusion", "segment": "disillusionment"},
-        {"name": "Path Squeeze", "segment": "enlightenment"},
-    ]
-}
+TARGET_QUESTION = (
+    "Which AI technologies are used to enhance financial time series forecasting performance by processing multi-period inputs?"
+)
 
-INSTRUMENTS = ["Python", "R", "C++"]
+TECHNOLOGIES = [
+    {
+        "id": "mlf",
+        "name": "Multi-period Learning Framework (MLF)",
+        "summary": "Learns relationships across multiple temporal periods for financial forecasting.",
+        "instruments": ["Python", "R", "C++"],
+        "sources": [],
+    },
+    {
+        "id": "irf",
+        "name": "Inter-period Redundancy Filtering (IRF)",
+        "summary": "Filters redundant signals between time periods.",
+        "instruments": ["Python", "R", "C++"],
+        "sources": [],
+    },
+    {
+        "id": "lwi",
+        "name": "Learnable Weighted-average Integration (LWI)",
+        "summary": "Learns optimal weights to integrate forecasts from different periods.",
+        "instruments": ["Python", "R", "C++"],
+        "sources": [],
+    },
+    {
+        "id": "fusion",
+        "name": "Fusion",
+        "summary": "Combines heterogeneous signals/features across horizons.",
+        "instruments": ["Python", "R", "C++"],
+        "sources": [],
+    },
+    {
+        "id": "path-squeeze",
+        "name": "Path Squeeze",
+        "summary": "Reduces dimensionality along temporal paths.",
+        "instruments": ["Python", "R", "C++"],
+        "sources": [],
+    },
+]
 
-@app.route("/")
+
+@app.get("/")
 def index():
     return render_template("index.html")
 
-@app.post("/technologies")
-def technologies():
-    data = request.get_json(force=True)
-    question = data.get("question", "")
-    technologies = TECH_RESPONSES.get(question, [])
-    for tech in technologies:
-        tech["instruments"] = INSTRUMENTS
-    return jsonify({"technologies": technologies})
+
+@app.post("/search")
+def search():
+    data = request.get_json(force=True) or {}
+    query = data.get("q", "")
+    matched = query.strip().lower() == TARGET_QUESTION.strip().lower()
+    items = TECHNOLOGIES if matched else []
+    return jsonify({"matched": matched, "items": items})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

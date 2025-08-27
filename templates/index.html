@@ -1,39 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Technology Advisor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-</head>
-<body>
-    <form id="question-form">
-        <input type="text" id="question-input" placeholder="Ask your question" />
-        <button type="submit">Send</button>
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-4 md:p-6 lg:p-8">
+    <form id="question-form" class="space-y-4">
+        <input id="question-input" type="text" name="q" class="w-full text-lg p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus-visible:ring-2 ring-teal-500" placeholder="Ask your question…" />
+        <button type="submit" class="px-6 py-3 rounded-xl bg-teal-600 text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 ring-teal-500">Submit</button>
     </form>
-    <div id="response-area">
-        <div id="question-bubble" class="message" style="display:none;"></div>
-        <ul id="technology-list" style="display:none;"></ul>
-    </div>
-    <div id="curve-container">
-        <svg id="hype-curve" width="600" height="300" viewBox="0 0 600 300">
-            <rect id="segment-discovery" class="segment" x="0" y="0" width="80" height="300"></rect>
-            <rect id="segment-tech-trigger" class="segment" x="80" y="0" width="80" height="300"></rect>
-            <rect id="segment-hype-peak" class="segment" x="160" y="0" width="120" height="300"></rect>
-            <rect id="segment-disillusionment" class="segment" x="280" y="0" width="120" height="300"></rect>
-            <rect id="segment-enlightenment" class="segment" x="400" y="0" width="100" height="300"></rect>
-            <rect id="segment-productivity" class="segment" x="500" y="0" width="80" height="300"></rect>
-            <rect id="segment-legacy" class="segment" x="580" y="0" width="20" height="300"></rect>
-            <path d="M0,200 Q50,50 100,150 T220,80 T340,220 T420,160 T540,200 T600,250" fill="none" stroke="#0055aa" stroke-width="2" />
-            <text x="40" y="20" class="segment-label" text-anchor="middle">Discovery</text>
-            <text x="120" y="20" class="segment-label" text-anchor="middle">Tech Trigger</text>
-            <text x="220" y="20" class="segment-label" text-anchor="middle">Hype Peak</text>
-            <text x="340" y="20" class="segment-label" text-anchor="middle">Disillusionment</text>
-            <text x="450" y="20" class="segment-label" text-anchor="middle">Enlightenment</text>
-            <text x="540" y="20" class="segment-label" text-anchor="middle">Productivity</text>
-            <text x="590" y="20" transform="rotate(90 590,20)" class="segment-label" text-anchor="middle">Legacy</text>
-        </svg>
-    </div>
-    <div id="tooltip"></div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+    <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Try asking the specific question about AI technologies for multi-period forecasting.</p>
+    <div id="curve-container" class="mt-8 hidden"></div>
+    <div id="results" class="mt-8 space-y-4"></div>
+</div>
+{% endblock %}
