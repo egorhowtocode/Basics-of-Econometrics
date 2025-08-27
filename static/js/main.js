@@ -44,11 +44,24 @@ function renderResults(items) {
   items.forEach((item, i) => container.appendChild(createTechCard(item, i)));
 }
 
+// Highlight curve segment
+function highlightSegment(seg) {
+  const segments = document.querySelectorAll('#gartner-curve .gc-segment');
+  segments.forEach(s => s.classList.remove('active'));
+  if (seg) {
+    const target = document.getElementById(`gc-${seg}`);
+    if (target) target.classList.add('active');
+  }
+}
+
 // Create a technology card with accordion behavior and animation delay
 function createTechCard(item, index) {
   const card = document.createElement('div');
   card.className = 'rounded-2xl bg-white dark:bg-slate-900 shadow anim-float-in';
   card.style.animationDelay = `${index * 90}ms`;
+
+  card.addEventListener('mouseenter', () => highlightSegment(item.segment));
+  card.addEventListener('mouseleave', () => highlightSegment(null));
 
   const btn = document.createElement('button');
   btn.id = `acc-btn-${item.id}`;
