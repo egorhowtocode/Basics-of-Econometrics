@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#technology-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+#technology-list li {
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+.segment {
+    fill: #ccc;
+    opacity: 0.3;
+}
+
+.segment.highlight {
+    fill: #4da6ff;
+    opacity: 0.7;
+}
+
+.segment-label {
+    font-size: 10px;
+}
+
+.message {
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+#tooltip {
+    position: absolute;
+    background: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: none;
+    pointer-events: none;
+}
