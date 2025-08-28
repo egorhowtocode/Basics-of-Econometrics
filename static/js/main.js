@@ -39,17 +39,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('question-input');
   const toggleBtn = document.getElementById('theme-toggle');
   const chatWindow = document.getElementById('chat-window');
+  const loading = document.getElementById('loading');
+  const gartnerContainer = document.getElementById('gartner-container');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const q = input.value;
     try {
-      const res = await fetch('/search', {
+      chatWindow.classList.add('hidden');
+      chatWindow.innerHTML = '';
+      gartnerContainer.classList.add('hidden');
+      loading.classList.remove('hidden');
+
+      const resPromise = fetch('/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ q })
-      });
-      const data = await res.json();
+      }).then(r => r.json());
+      await Promise.all([resPromise, new Promise(r => setTimeout(r, 5000))]);
+      const data = await resPromise;
+      loading.classList.add('hidden');
       if (data.matched) {
         if (window.marked) {
           chatWindow.innerHTML = window.marked.parse(markdownText);
@@ -60,14 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
         chatWindow.classList.remove('anim-float-in');
         void chatWindow.offsetWidth;
         chatWindow.classList.add('anim-float-in');
+        gartnerContainer.classList.remove('hidden');
+        gartnerContainer.classList.remove('anim-float-in');
+        void gartnerContainer.offsetWidth;
+        gartnerContainer.classList.add('anim-float-in');
       } else {
         chatWindow.classList.add('hidden');
         chatWindow.innerHTML = '';
+        gartnerContainer.classList.add('hidden');
       }
       renderResults(data.items);
       showToast('Results refreshed for your question.');
     } catch (err) {
       console.error(err);
+      loading.classList.add('hidden');
     }
   });
 
