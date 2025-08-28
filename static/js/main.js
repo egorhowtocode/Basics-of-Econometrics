@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatWindow = document.getElementById('chat-window');
   const loading = document.getElementById('loading');
   const gartnerContainer = document.getElementById('gartner-container');
+  const results = document.getElementById('results');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chatWindow.innerHTML = '';
       gartnerContainer.classList.add('hidden');
       loading.classList.remove('hidden');
+      results.classList.add('hidden');
 
       const resPromise = fetch('/search', {
         method: 'POST',
@@ -79,10 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
         gartnerContainer.classList.add('hidden');
       }
       renderResults(data.items);
+      results.classList.remove('hidden');
       showToast('Results refreshed for your question.');
     } catch (err) {
       console.error(err);
       loading.classList.add('hidden');
+      results.classList.remove('hidden');
     }
   });
 
