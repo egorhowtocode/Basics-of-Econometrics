@@ -1,6 +1,6 @@
 # AI Technologies Search Demo
 
-Minimal Flask web app demonstrating a question-driven search with a modern Tailwind UI.
+Flask frontend paired with a FastAPI processing service. The web app asks the processor for a list of AI technologies and renders them along with a Gartner-style maturity curve.
 
 ## Setup
 
@@ -8,26 +8,29 @@ Minimal Flask web app demonstrating a question-driven search with a modern Tailw
 python -m venv .venv
 source .venv/bin/activate  # or .venv\\Scripts\\activate on Windows
 pip install -r requirements.txt
+pip install -r processing_app/requirements.txt
 ```
 
 ## Run (development)
 
+Run the processing service and the Flask app (in separate terminals):
+
 ```bash
+uvicorn processing_app.main:app --reload
 flask --app app run --debug
 ```
 
-Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser. Hover over technology cards to highlight their segment on the Gartner maturity curve.
 
-## Docker/Gunicorn
+## Docker Compose
 
-Build the image and run it with Gunicorn to serve the app on port 8000:
+Use Docker Compose to run the web and processing services together:
 
 ```bash
-docker build -t ai-tech-search .
-docker run --rm -p 8000:8000 ai-tech-search
+docker compose up --build
 ```
 
-The container binds to `0.0.0.0:8000`, making it reachable from outside the host machine (replace `localhost` with the host's IP).
+The web interface will be available at [http://localhost:8000](http://localhost:8000).
 
 ## Notes
 
