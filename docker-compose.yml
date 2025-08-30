@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - processor
+  processor:
+    build:
+      context: .
+      dockerfile: processing_app/Dockerfile
+    ports:
+      - "8001:8000"
