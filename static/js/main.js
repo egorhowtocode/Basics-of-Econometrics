@@ -63,8 +63,10 @@ function renderResults(items) {
 
 // Highlight curve segment
 function highlightSegment(seg) {
-  document.querySelectorAll('#gartner-curve .gc-segment').forEach(s => s.classList.remove('active'));
-  if (seg) {
+  document
+    .querySelectorAll('#gartner-curve .gc-segment')
+    .forEach((s) => s.classList.remove('active'));
+  if (seg && seg !== 'none') {
     const target = document.getElementById(`gc-${seg}`);
     if (target) target.classList.add('active');
   }
@@ -72,6 +74,7 @@ function highlightSegment(seg) {
 
 // Create a technology card with accordion behavior and animation delay
 function createTechCard(item, index) {
+  const uid = `tech-${index}`;
   const card = document.createElement('div');
   card.className = 'rounded-2xl bg-white dark:bg-slate-900 shadow anim-float-in';
   card.style.animationDelay = `${index * 90}ms`;
@@ -80,20 +83,17 @@ function createTechCard(item, index) {
   card.addEventListener('mouseleave', () => highlightSegment(null));
 
   const btn = document.createElement('button');
-  btn.id = `acc-btn-${item.id}`;
+  btn.id = `acc-btn-${uid}`;
   btn.className = 'w-full flex justify-between items-center p-4 text-left focus:outline-none focus-visible:ring-2 ring-teal-500';
   btn.setAttribute('aria-expanded', 'false');
-  btn.setAttribute('aria-controls', `panel-${item.id}`);
+  btn.setAttribute('aria-controls', `panel-${uid}`);
   btn.innerHTML = `
-    <span>
-      <span class="font-semibold">${item.name}</span>
-      <p class="text-sm text-slate-500 dark:text-slate-400">${item.maturity || ''}</p>
-    </span>
+    <span class="font-semibold">${item.name}</span>
     <svg class="chevron w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`;
-  btn.addEventListener('click', () => toggleAccordion(item.id));
+  btn.addEventListener('click', () => toggleAccordion(uid));
 
   const panel = document.createElement('div');
-  panel.id = `panel-${item.id}`;
+  panel.id = `panel-${uid}`;
   panel.className = 'accordion-panel px-4';
   panel.setAttribute('role', 'region');
   panel.setAttribute('aria-labelledby', btn.id);
@@ -108,7 +108,10 @@ function createTechCard(item, index) {
     <h4 class="font-medium mt-2">Instruments</h4>
     <div class="mt-1 flex flex-wrap gap-2">
       ${item.instruments
-        .map(i => `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-sm">${i}</span>`)
+        .map(
+          (i) =>
+            `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-sm">${i}</span>`
+        )
         .join('')}
     </div>`;
 
@@ -117,10 +120,16 @@ function createTechCard(item, index) {
     sources.innerHTML = `
       <h4 class="font-medium mt-2">Sources</h4>
       <ul class="list-disc ml-5 text-sm text-slate-500 dark:text-slate-400 mt-1">
-        ${item.sources.map(s => `<li>${s}</li>`).join('')}
+        ${item.sources
+          .map(
+            (s) =>
+              `<li><a href="${s.url}" target="_blank" class="underline text-teal-600 dark:text-teal-400">${s.name}</a></li>`
+          )
+          .join('')}
       </ul>`;
   } else {
-    sources.innerHTML = '<h4 class="font-medium mt-2">Sources</h4><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">No sources available yet.</p>';
+    sources.innerHTML =
+      '<h4 class="font-medium mt-2">Sources</h4><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">No sources available yet.</p>';
   }
 
   panel.appendChild(desc);
