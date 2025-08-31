@@ -1,23 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="w-full h-full flex flex-col md:flex-row gap-4 p-4 md:p-6">
-    <!-- Left Panel -->
-    <div class="w-full md:w-3/5 bg-white dark:bg-slate-900 rounded-xl shadow-sm flex flex-col p-4">
-        <form id="question-form" class="space-y-4">
-            <input id="question-input" type="text" name="q" class="w-full text-lg p-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus-visible:ring-2 ring-teal-500" placeholder="Ask your question…" />
-            <button type="submit" class="px-6 py-3 rounded-xl bg-teal-600 text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 ring-teal-500">Submit</button>
-        </form>
-        <p class="mt-4 text-sm text-slate-500 dark:text-slate-400">Try asking the specific question about AI technologies for multi-period forecasting.</p>
-        <div id="loading" class="mt-4 text-center hidden">
-            <svg class="animate-spin h-8 w-8 text-teal-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-            </svg>
-        </div>
-        <div id="results" class="mt-6 flex-1 overflow-y-auto scroll-smooth space-y-4"></div>
+<!-- Hero Section -->
+<div class="max-w-2xl mx-auto mt-10 p-8 bg-gradient-to-br from-slate-100 to-slate-50 rounded-2xl shadow-md">
+    <form id="question-form" class="flex flex-col sm:flex-row gap-4">
+        <input id="question-input" type="text" name="q" class="flex-1 text-xl sm:text-2xl p-4 rounded-xl border border-slate-300 focus:outline-none focus-visible:ring-2 ring-teal-500" placeholder="Ask your question…" />
+        <button type="submit" class="px-6 py-4 rounded-xl bg-teal-600 text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 ring-teal-500">Submit</button>
+    </form>
+    <div id="error-banner" class="mt-4 hidden text-sm text-slate-600 bg-slate-100 px-4 py-2 rounded-md"></div>
+    <div id="loading" class="mt-4 text-center hidden">
+        <svg class="animate-spin h-8 w-8 text-teal-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
     </div>
-    <!-- Right Panel -->
-    <div class="w-full md:w-2/5 bg-white dark:bg-slate-900 rounded-xl shadow-sm flex items-center justify-center p-4">
+</div>
+
+<!-- Content Area -->
+<div id="content-area" class="hidden mt-8 px-4 md:px-8 grid grid-cols-1 gap-8 md:grid-cols-[35%_65%] xl:grid-cols-[30%_70%]">
+    <!-- Technologies Sidebar -->
+    <aside class="bg-[#FAFBFC] border border-slate-200 rounded-xl p-4 max-h-[70vh] overflow-y-auto">
+        <div id="results" class="space-y-2"></div>
+    </aside>
+
+    <!-- Plot Panel -->
+    <section class="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-center min-h-[70vh]">
         <div id="gartner-container" class="w-full h-full flex items-center justify-center hidden">
             <svg id="gartner-curve" viewBox="0 0 700 300" class="w-full h-auto max-h-full">
                 <path id="gc-discovery" class="gc-segment" d="M40 220 Q90 200 130 180" />
@@ -36,6 +42,7 @@
                 <text x="580" y="230" class="gc-label">Commoditized Legacy</text>
             </svg>
         </div>
-    </div>
+    </section>
 </div>
 {% endblock %}
+
