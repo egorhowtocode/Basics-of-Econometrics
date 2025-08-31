@@ -7,13 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const loading = document.getElementById('loading');
   const results = document.getElementById('results');
   const gartnerContainer = document.getElementById('gartner-container');
+  const content = document.getElementById('content-area');
+  const errorBanner = document.getElementById('error-banner');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const q = input.value;
+    const q = input.value.trim();
     try {
+      errorBanner.classList.add('hidden');
       loading.classList.remove('hidden');
-      results.classList.add('hidden');
+      content.classList.add('hidden');
       gartnerContainer.classList.add('hidden');
       highlightSegment(null);
 
@@ -22,20 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ q })
       }).then(r => r.json());
+
       loading.classList.add('hidden');
-      renderResults(data.items);
-      results.classList.remove('hidden');
-      if (data.items && data.items.length) {
+      const hasItems = renderResults(data.items);
+
+      if (hasItems) {
+        content.classList.remove('hidden');
         gartnerContainer.classList.remove('hidden');
         gartnerContainer.classList.remove('anim-float-in');
         void gartnerContainer.offsetWidth;
         gartnerContainer.classList.add('anim-float-in');
+        showToast('Results refreshed for your question.');
+      } else {
+        errorBanner.textContent = 'Please enter a valid question.';
+        errorBanner.classList.remove('hidden');
       }
-      showToast('Results refreshed for your question.');
     } catch (err) {
       console.error(err);
       loading.classList.add('hidden');
-      results.classList.remove('hidden');
+      errorBanner.textContent = 'Something went wrong. Please try again.';
+      errorBanner.classList.remove('hidden');
     }
   });
 
@@ -52,13 +61,10 @@ function renderResults(items) {
   const container = document.getElementById('results');
   container.innerHTML = '';
   if (!items || !items.length) {
-    const card = document.createElement('div');
-    card.className = 'anim-float-in bg-white dark:bg-slate-900 rounded-2xl p-6 text-center shadow';
-    card.textContent = 'Sorry, we could not find anything.';
-    container.appendChild(card);
-    return;
+    return false;
   }
   items.forEach((item, i) => container.appendChild(createTechCard(item, i)));
+  return true;
 }
 
 // Highlight curve segment
@@ -76,7 +82,7 @@ function highlightSegment(seg) {
 function createTechCard(item, index) {
   const uid = `tech-${index}`;
   const card = document.createElement('div');
-  card.className = 'rounded-2xl bg-white dark:bg-slate-900 shadow anim-float-in';
+  card.className = 'border-b border-slate-200 last:border-b-0';
   card.style.animationDelay = `${index * 90}ms`;
 
   card.addEventListener('mouseenter', () => highlightSegment(item.segment));
@@ -84,24 +90,24 @@ function createTechCard(item, index) {
 
   const btn = document.createElement('button');
   btn.id = `acc-btn-${uid}`;
-  btn.className = 'w-full flex justify-between items-center p-4 text-left focus:outline-none focus-visible:ring-2 ring-teal-500';
+  btn.className = 'w-full flex justify-between items-center py-3 px-2 text-left text-sm font-medium hover:bg-white rounded-md focus:outline-none focus-visible:ring-2 ring-teal-500';
   btn.setAttribute('aria-expanded', 'false');
   btn.setAttribute('aria-controls', `panel-${uid}`);
   btn.innerHTML = `
-    <span class="font-semibold">${item.name}</span>
+    <span>${item.name}</span>
     <svg class="chevron w-5 h-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>`;
   btn.addEventListener('click', () => toggleAccordion(uid));
 
   const panel = document.createElement('div');
   panel.id = `panel-${uid}`;
-  panel.className = 'accordion-panel px-4';
+  panel.className = 'accordion-panel px-2 text-sm text-slate-600';
   panel.setAttribute('role', 'region');
   panel.setAttribute('aria-labelledby', btn.id);
 
   const desc = document.createElement('div');
   desc.innerHTML = `
     <h4 class="font-medium">Вклад в продажи</h4>
-    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">${item.description}</p>`;
+    <p class="mt-1">${item.description}</p>`;
 
   const instruments = document.createElement('div');
   instruments.innerHTML = `
@@ -110,7 +116,7 @@ function createTechCard(item, index) {
       ${item.instruments
         .map(
           (i) =>
-            `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-sm">${i}</span>`
+            `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-xs">${i}</span>`
         )
         .join('')}
     </div>`;
@@ -119,7 +125,7 @@ function createTechCard(item, index) {
   if (item.sources && item.sources.length) {
     sources.innerHTML = `
       <h4 class="font-medium mt-2">Sources</h4>
-      <ul class="list-disc ml-5 text-sm text-slate-500 dark:text-slate-400 mt-1">
+      <ul class="list-disc ml-5 mt-1">
         ${item.sources
           .map(
             (s) =>
@@ -129,7 +135,7 @@ function createTechCard(item, index) {
       </ul>`;
   } else {
     sources.innerHTML =
-      '<h4 class="font-medium mt-2">Sources</h4><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">No sources available yet.</p>';
+      '<h4 class="font-medium mt-2">Sources</h4><p class="mt-1">No sources available yet.</p>';
   }
 
   panel.appendChild(desc);
