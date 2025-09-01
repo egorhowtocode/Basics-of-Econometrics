@@ -1,14 +1,14 @@
 // Frontend logic for search, accordion, dark mode, and toasts
 
-const BASELINE = 260;
+const BASELINE = 600;
 const STAGE_RANGES = {
-  discovery: [40, 130],
-  trigger: [130, 220],
-  peak: [220, 260],
-  trough: [260, 360],
-  slope: [360, 470],
-  plateau: [470, 560],
-  legacy: [560, 650],
+  discovery: [100, 250],
+  trigger: [250, 480],
+  peak: [480, 650],
+  trough: [650, 860],
+  slope: [860, 1020],
+  plateau: [1020, 1120],
+  legacy: [1120, 1200],
 };
 
 const stageDescriptions = {
@@ -134,32 +134,11 @@ function highlightSegment(seg) {
 }
 
 function initGartnerCurve() {
-  const points = [
-    [40, 260],
-    [110, 200],
-    [150, 100],
-    [170, 40],
-    [190, 100],
-    [240, 240],
-    [260, 260],
-    [280, 240],
-    [360, 180],
-    [470, 150],
-    [560, 150],
-    [650, 200],
-  ];
-  const line = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
-  const curvePath = line(points);
+  const curvePath =
+    "M100 450 C180 420, 220 360, 280 300 C340 220, 420 140, 480 140 C540 140, 600 240, 650 370 C700 440, 780 360, 860 330 C940 310, 1020 320, 1080 340 S1140 380, 1120 360";
+  const areaPath = `${curvePath} L1120 ${BASELINE} L100 ${BASELINE} Z`;
   const curve = document.getElementById('gc-curve-path');
   curve.setAttribute('d', curvePath);
-
-  const area = d3
-    .area()
-    .curve(d3.curveCatmullRom.alpha(0.5))
-    .x((d) => d[0])
-    .y0(BASELINE)
-    .y1((d) => d[1]);
-  const areaPath = area(points);
   const maskPath = document.getElementById('mask-path');
   maskPath.setAttribute('d', areaPath);
 
