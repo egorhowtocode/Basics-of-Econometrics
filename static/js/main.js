@@ -179,9 +179,10 @@ function createTechCard(item, index) {
   panel.setAttribute('aria-labelledby', btn.id);
 
   const desc = document.createElement('div');
+  const parsedDesc = marked.parse(item.description || "");
   desc.innerHTML = `
     <h4 class="font-medium">Вклад в продажи</h4>
-    <p class="mt-1">${item.description}</p>`;
+    <div class="mt-1">${parsedDesc}</div>`;
 
   const instruments = document.createElement('div');
   instruments.innerHTML = `
