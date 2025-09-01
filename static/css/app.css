@@ -55,10 +55,20 @@
   pointer-events: none;
 }
 
+#stage-overlay {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+#stage-overlay.visible {
+  opacity: 1;
+}
+
 #stage-description {
   opacity: 0;
   transform: translateY(0.5rem);
   transition: opacity 150ms ease, transform 150ms ease;
+  min-height: 4rem;
 }
 
 #stage-description.show {
@@ -70,4 +80,27 @@
 .gc-label {
   font-size: 12px;
   fill: currentColor;
+}
+
+#stage-clip-rect {
+  transition: x 0.4s ease, width 0.4s ease;
+}
+
+@keyframes rise {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+#mask-path,
+#gc-curve-path {
+  transform-origin: bottom;
+  transform-box: fill-box;
+}
+
+.animate-rise {
+  animation: rise 1.2s ease-out forwards;
 }

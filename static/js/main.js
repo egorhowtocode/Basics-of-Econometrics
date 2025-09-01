@@ -103,11 +103,11 @@ function highlightSegment(seg) {
   if (!overlay || !clipRect || !leftLine || !rightLine || !descPanel) return;
 
   if (!seg || seg === 'none' || !STAGE_RANGES[seg]) {
-    overlay.setAttribute('visibility', 'hidden');
+    overlay.classList.remove('visible');
+    setTimeout(() => overlay.setAttribute('visibility', 'hidden'), 400);
     leftLine.setAttribute('visibility', 'hidden');
     rightLine.setAttribute('visibility', 'hidden');
     descPanel.classList.remove('show');
-    setTimeout(() => descPanel.classList.add('hidden'), 150);
     return;
   }
 
@@ -115,6 +115,7 @@ function highlightSegment(seg) {
   clipRect.setAttribute('x', x1);
   clipRect.setAttribute('width', x2 - x1);
   overlay.setAttribute('visibility', 'visible');
+  overlay.classList.add('visible');
 
   leftLine.setAttribute('x1', x1);
   leftLine.setAttribute('x2', x1);
@@ -129,27 +130,34 @@ function highlightSegment(seg) {
   rightLine.setAttribute('visibility', 'visible');
 
   descPanel.textContent = stageDescriptions[seg];
-  descPanel.classList.remove('hidden');
   requestAnimationFrame(() => descPanel.classList.add('show'));
 }
 
 function initGartnerCurve() {
   const points = [
-    [40, 220],
-    [130, 180],
-    [220, 80],
-    [260, 90],
-    [360, 220],
-    [470, 170],
-    [560, 170],
-    [650, 210],
+    [40, 260],
+    [110, 200],
+    [150, 100],
+    [170, 40],
+    [190, 100],
+    [240, 240],
+    [260, 260],
+    [280, 240],
+    [360, 180],
+    [470, 150],
+    [560, 150],
+    [650, 200],
   ];
   const curvePath = catmullRom2bezier(points);
   const curve = document.getElementById('gc-curve-path');
   curve.setAttribute('d', curvePath);
 
   const areaPath = `${curvePath} L${points[points.length - 1][0]} ${BASELINE} L${points[0][0]} ${BASELINE} Z`;
-  document.getElementById('mask-path').setAttribute('d', areaPath);
+  const maskPath = document.getElementById('mask-path');
+  maskPath.setAttribute('d', areaPath);
+
+  curve.classList.add('animate-rise');
+  maskPath.classList.add('animate-rise');
 
   overlay = document.getElementById('stage-overlay');
   clipRect = document.getElementById('stage-clip-rect');
@@ -179,7 +187,7 @@ function catmullRom2bezier(points) {
 function createTechCard(item, index) {
   const uid = `tech-${index}`;
   const card = document.createElement('div');
-  card.className = 'border-b border-slate-200 last:border-b-0';
+  card.className = 'border-b border-slate-200 last:border-b-0 anim-float-in';
   card.style.animationDelay = `${index * 90}ms`;
 
   card.addEventListener('mouseenter', () => highlightSegment(item.segment));
