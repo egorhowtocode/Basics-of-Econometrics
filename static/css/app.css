@@ -43,17 +43,28 @@
 }
 
 /* Gartner technology maturity curve */
-.gc-segment {
+.gc-curve {
   stroke: #94a3b8; /* slate-400 */
   stroke-width: 4;
   fill: none;
-  opacity: 0.3;
-  transition: stroke 0.2s ease, opacity 0.2s ease;
 }
 
-.gc-segment.active {
-  stroke: #14b8a6; /* teal-500 */
+.stage-boundary {
+  stroke: black;
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+#stage-description {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+#stage-description.show {
   opacity: 1;
+  transform: translateY(0);
+  transition-duration: 250ms;
 }
 
 .gc-label {

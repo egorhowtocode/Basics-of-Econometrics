@@ -1,5 +1,35 @@
 // Frontend logic for search, accordion, dark mode, and toasts
 
+const BASELINE = 260;
+const STAGE_RANGES = {
+  discovery: [40, 130],
+  trigger: [130, 220],
+  peak: [220, 260],
+  trough: [260, 360],
+  slope: [360, 470],
+  plateau: [470, 560],
+  legacy: [560, 650],
+};
+
+const stageDescriptions = {
+  discovery:
+    "Discovery marks the birth of a concept. Teams tinker with unproven ideas and prototypes. Practical applications are scarce but curiosity pushes research. Early adopters watch for breakthroughs.",
+  trigger:
+    "The technology trigger draws attention as early successes surface. Media coverage amplifies expectations. Investment pours in despite limited evidence of viability. Enthusiasts believe a revolution is near.",
+  peak:
+    "Hype reaches its maximum during the peak of inflated expectations. Projects multiply faster than they can prove value. Some pioneers report successes while many more quietly struggle. The market assumes mainstream adoption is imminent.",
+  trough:
+    "Disillusionment follows when promises remain unfulfilled. Funding dries up and projects are abandoned. Remaining teams refocus on fundamentals to uncover real use cases. Lessons from failed experiments shape the next wave.",
+  slope:
+    "On the slope of enlightenment, viable practices start to crystallize. Case studies demonstrate tangible benefits. Tooling improves and integration challenges are resolved. Cautious organizations begin pilot programs.",
+  plateau:
+    "The plateau of productivity signals a maturing technology. Best practices are widely understood and tooling is stable. Adoption expands beyond innovators into the mainstream. Growth becomes predictable and incremental.",
+  legacy:
+    "Commoditized legacy represents the final phase. Competition drives prices down and differentiation fades. The technology persists but rarely influences strategy. Attention shifts to the next emerging wave.",
+};
+
+let overlay, clipRect, leftLine, rightLine, descPanel;
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('question-form');
   const input = document.getElementById('question-input');
@@ -54,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   initTheme();
+  initGartnerCurve();
 });
 
 // Render the list of technologies or a not-found card
@@ -69,13 +100,79 @@ function renderResults(items) {
 
 // Highlight curve segment
 function highlightSegment(seg) {
-  document
-    .querySelectorAll('#gartner-curve .gc-segment')
-    .forEach((s) => s.classList.remove('active'));
-  if (seg && seg !== 'none') {
-    const target = document.getElementById(`gc-${seg}`);
-    if (target) target.classList.add('active');
+  if (!overlay || !clipRect || !leftLine || !rightLine || !descPanel) return;
+
+  if (!seg || seg === 'none' || !STAGE_RANGES[seg]) {
+    overlay.setAttribute('visibility', 'hidden');
+    leftLine.setAttribute('visibility', 'hidden');
+    rightLine.setAttribute('visibility', 'hidden');
+    descPanel.classList.remove('show');
+    setTimeout(() => descPanel.classList.add('hidden'), 150);
+    return;
   }
+
+  const [x1, x2] = STAGE_RANGES[seg];
+  clipRect.setAttribute('x', x1);
+  clipRect.setAttribute('width', x2 - x1);
+  overlay.setAttribute('visibility', 'visible');
+
+  leftLine.setAttribute('x1', x1);
+  leftLine.setAttribute('x2', x1);
+  leftLine.setAttribute('y1', 0);
+  leftLine.setAttribute('y2', BASELINE);
+  leftLine.setAttribute('visibility', 'visible');
+
+  rightLine.setAttribute('x1', x2);
+  rightLine.setAttribute('x2', x2);
+  rightLine.setAttribute('y1', 0);
+  rightLine.setAttribute('y2', BASELINE);
+  rightLine.setAttribute('visibility', 'visible');
+
+  descPanel.textContent = stageDescriptions[seg];
+  descPanel.classList.remove('hidden');
+  requestAnimationFrame(() => descPanel.classList.add('show'));
+}
+
+function initGartnerCurve() {
+  const points = [
+    [40, 220],
+    [130, 180],
+    [220, 80],
+    [260, 90],
+    [360, 220],
+    [470, 170],
+    [560, 170],
+    [650, 210],
+  ];
+  const curvePath = catmullRom2bezier(points);
+  const curve = document.getElementById('gc-curve-path');
+  curve.setAttribute('d', curvePath);
+
+  const areaPath = `${curvePath} L${points[points.length - 1][0]} ${BASELINE} L${points[0][0]} ${BASELINE} Z`;
+  document.getElementById('mask-path').setAttribute('d', areaPath);
+
+  overlay = document.getElementById('stage-overlay');
+  clipRect = document.getElementById('stage-clip-rect');
+  leftLine = document.getElementById('stage-left');
+  rightLine = document.getElementById('stage-right');
+  descPanel = document.getElementById('stage-description');
+}
+
+function catmullRom2bezier(points) {
+  let d = `M${points[0][0]} ${points[0][1]}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] || points[i];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] || p2;
+
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C${c1x} ${c1y} ${c2x} ${c2y} ${p2[0]} ${p2[1]}`;
+  }
+  return d;
 }
 
 // Create a technology card with accordion behavior and animation delay

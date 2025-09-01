@@ -23,16 +23,25 @@
     </aside>
 
     <!-- Plot Panel -->
-    <section class="bg-white border border-slate-200 rounded-xl p-6 flex items-center justify-center min-h-[70vh]">
+    <section class="bg-white border border-slate-200 rounded-xl p-6 flex flex-col items-center justify-center min-h-[70vh]">
         <div id="gartner-container" class="w-full h-full flex items-center justify-center hidden">
-            <svg id="gartner-curve" viewBox="0 0 700 300" class="w-full h-auto max-h-full">
-                <path id="gc-discovery" class="gc-segment" d="M40 220 Q90 200 130 180" />
-                <path id="gc-trigger" class="gc-segment" d="M130 180 Q180 60 220 80" />
-                <path id="gc-peak" class="gc-segment" d="M220 80 Q240 60 260 90" />
-                <path id="gc-trough" class="gc-segment" d="M260 90 C300 260 330 200 360 220" />
-                <path id="gc-slope" class="gc-segment" d="M360 220 Q420 150 470 170" />
-                <path id="gc-plateau" class="gc-segment" d="M470 170 L560 170" />
-                <path id="gc-legacy" class="gc-segment" d="M560 170 Q610 190 650 210" />
+            <svg id="gartner-curve" viewBox="0 0 700 300" class="w-full h-auto max-h-full" role="img" aria-label="Technology hype cycle curve">
+                <defs>
+                    <linearGradient id="stage-gradient" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="green" stop-opacity="0.1" />
+                        <stop offset="100%" stop-color="green" stop-opacity="0.4" />
+                    </linearGradient>
+                    <clipPath id="stage-clip">
+                        <rect id="stage-clip-rect" x="0" y="0" width="0" height="260"></rect>
+                    </clipPath>
+                    <mask id="stage-mask">
+                        <path id="mask-path" d="" fill="white"></path>
+                    </mask>
+                </defs>
+                <rect id="stage-overlay" x="0" y="0" width="700" height="260" fill="url(#stage-gradient)" clip-path="url(#stage-clip)" mask="url(#stage-mask)" visibility="hidden" aria-hidden="true"></rect>
+                <path id="gc-curve-path" class="gc-curve" d=""></path>
+                <line id="stage-left" class="stage-boundary" y1="0" y2="260" visibility="hidden" aria-hidden="true"></line>
+                <line id="stage-right" class="stage-boundary" y1="0" y2="260" visibility="hidden" aria-hidden="true"></line>
                 <text x="70" y="260" class="gc-label">Discovery Nascent Research</text>
                 <text x="150" y="40" class="gc-label">Early Exploration Technology Trigger</text>
                 <text x="220" y="60" class="gc-label">Peak of Inflated Expectations</text>
@@ -42,6 +51,7 @@
                 <text x="580" y="230" class="gc-label">Commoditized Legacy</text>
             </svg>
         </div>
+        <div id="stage-description" class="mt-4 text-sm text-slate-700 hidden" aria-live="polite"></div>
     </section>
 </div>
 {% endblock %}
