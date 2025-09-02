@@ -2,30 +2,30 @@
 
 const BASELINE = 600;
 const STAGE_RANGES = {
-  discovery: [100, 250],
-  trigger: [250, 480],
-  peak: [480, 650],
-  trough: [650, 860],
-  slope: [860, 1020],
-  plateau: [1020, 1120],
-  legacy: [1120, 1200],
+  discovery: [100, 210],
+  trigger: [210, 420],
+  peak: [420, 540],
+  trough: [540, 690],
+  slope: [690, 880],
+  plateau: [880, 1050],
+  legacy: [1050, 1200],
 };
 
 const stageDescriptions = {
   discovery:
-    "Discovery marks the birth of a concept. Teams tinker with unproven ideas and prototypes. Practical applications are scarce but curiosity pushes research. Early adopters watch for breakthroughs.",
+    "ИИ появляется как исследовательская идея: первые публикации, прототипы и лабораторные эксперименты без практических внедрений.",
   trigger:
-    "The technology trigger draws attention as early successes surface. Media coverage amplifies expectations. Investment pours in despite limited evidence of viability. Enthusiasts believe a revolution is near.",
+    "Технологии ИИ начинают тестироваться в пилотных проектах. Появляются стартапы, первые инвестиции и внимание СМИ.",
   peak:
-    "Hype reaches its maximum during the peak of inflated expectations. Projects multiply faster than they can prove value. Some pioneers report successes while many more quietly struggle. The market assumes mainstream adoption is imminent.",
+    "Общество и бизнес ждут революционных изменений от ИИ. Много обещаний, быстрых инвестиций и «модных» внедрений, часто без реальной отдачи.",
   trough:
-    "Disillusionment follows when promises remain unfulfilled. Funding dries up and projects are abandoned. Remaining teams refocus on fundamentals to uncover real use cases. Lessons from failed experiments shape the next wave.",
+    "Часть проектов закрывается, бизнес видит слабые места технологий, снижается доверие и инвестиции. Происходит отбор реально жизнеспособных решений.",
   slope:
-    "On the slope of enlightenment, viable practices start to crystallize. Case studies demonstrate tangible benefits. Tooling improves and integration challenges are resolved. Cautious organizations begin pilot programs.",
+    "ИИ начинает приносить ощутимую пользу. Компании учатся правильно внедрять технологии, появляются устойчивые бизнес-кейсы и первые масштабные пилоты.",
   plateau:
-    "The plateau of productivity signals a maturing technology. Best practices are widely understood and tooling is stable. Adoption expands beyond innovators into the mainstream. Growth becomes predictable and incremental.",
+    "ИИ становится массовым инструментом. Технологии стандартизированы, интегрированы в бизнес-процессы и продукты. Рост идет через эффективность, а не хайп.",
   legacy:
-    "Commoditized legacy represents the final phase. Competition drives prices down and differentiation fades. The technology persists but rarely influences strategy. Attention shifts to the next emerging wave.",
+    "ИИ превращается в «фоновую» технологию. Она работает как инфраструктура, но теряет новизну. На смену приходят новые волны исследований и инноваций.",
 };
 
 let overlay, clipRect, leftLine, rightLine, descPanel;
@@ -65,15 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
         gartnerContainer.classList.remove('anim-float-in');
         void gartnerContainer.offsetWidth;
         gartnerContainer.classList.add('anim-float-in');
-        showToast('Results refreshed for your question.');
+        showToast('Результаты обработки вашего вопроса обновлены.');
       } else {
-        errorBanner.textContent = 'Please enter a valid question.';
+        errorBanner.textContent = 'К сожалению, ответ на ваш вопрос не нашелся. Попробуйте другой!';
         errorBanner.classList.remove('hidden');
       }
     } catch (err) {
       console.error(err);
       loading.classList.add('hidden');
-      errorBanner.textContent = 'Something went wrong. Please try again.';
+      errorBanner.textContent = 'Что-то пошло не так. Пожалуйста, обратитесь к поддержке, если ошибка сохранится.';
       errorBanner.classList.remove('hidden');
     }
   });
@@ -186,27 +186,27 @@ function createTechCard(item, index) {
 
   const instruments = document.createElement('div');
   instruments.innerHTML = `
-    <h4 class="font-medium mt-2">Instruments</h4>
+    <h4 class="font-medium mt-2">Инструменты</h4>
     <div class="mt-1 flex flex-wrap gap-2">
       ${item.instruments
-        .map(
-          (i) =>
-            `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-xs">${i}</span>`
-        )
-        .join('')}
+      .map(
+        (i) =>
+          `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-xs">${i}</span>`
+      )
+      .join('')}
     </div>`;
 
   const sources = document.createElement('div');
   if (item.sources && item.sources.length) {
     sources.innerHTML = `
-      <h4 class="font-medium mt-2">Sources</h4>
+      <h4 class="font-medium mt-2">Источники</h4>
       <ul class="list-disc ml-5 mt-1">
         ${item.sources
-          .map(
-            (s) =>
-              `<li><a href="${s.url}" target="_blank" class="underline text-teal-600 dark:text-teal-400">${s.name}</a></li>`
-          )
-          .join('')}
+        .map(
+          (s) =>
+            `<li><a href="${s.url}" target="_blank" class="underline text-teal-600 dark:text-teal-400">${s.name}</a></li>`
+        )
+        .join('')}
       </ul>`;
   } else {
     sources.innerHTML =
@@ -233,7 +233,7 @@ function toggleAccordion(id) {
     if (p !== targetPanel) {
       p.style.maxHeight = null;
       p.classList.remove('open');
-      const b = document.getElementById(`acc-btn-${p.id.replace('panel-','')}`);
+      const b = document.getElementById(`acc-btn-${p.id.replace('panel-', '')}`);
       if (b) {
         b.setAttribute('aria-expanded', 'false');
         const c = b.querySelector('.chevron');
