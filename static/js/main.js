@@ -1,4 +1,4 @@
-// Frontend logic for search, accordion, dark mode, and toasts
+// Frontend logic for search, accordion, and toasts
 
 const BASELINE = 600;
 const STAGE_RANGES = {
@@ -33,7 +33,6 @@ let overlay, clipRect, leftLine, rightLine, descPanel;
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('question-form');
   const input = document.getElementById('question-input');
-  const toggleBtn = document.getElementById('theme-toggle');
   const loading = document.getElementById('loading');
   const results = document.getElementById('results');
   const gartnerContainer = document.getElementById('gartner-container');
@@ -78,12 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  toggleBtn.addEventListener('click', () => {
-    const mode = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-    setTheme(mode);
-  });
-
-  initTheme();
   initGartnerCurve();
 });
 
@@ -191,7 +184,7 @@ function createTechCard(item, index) {
       ${item.instruments
       .map(
         (i) =>
-          `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-800 dark:text-teal-100 text-xs">${i}</span>`
+          `<span class="px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 text-xs">${i}</span>`
       )
       .join('')}
     </div>`;
@@ -204,7 +197,7 @@ function createTechCard(item, index) {
         ${item.sources
         .map(
           (s) =>
-            `<li><a href="${s.url}" target="_blank" class="underline text-teal-600 dark:text-teal-400">${s.name}</a></li>`
+            `<li><a href="${s.url}" target="_blank" class="underline text-teal-600">${s.name}</a></li>`
         )
         .join('')}
       </ul>`;
@@ -254,36 +247,6 @@ function toggleAccordion(id) {
     targetChevron.style.transform = 'rotate(180deg)';
   }
 }
-
-// Theme utilities
-function setTheme(mode) {
-  const root = document.documentElement;
-  if (mode === 'dark') {
-    root.classList.add('dark');
-  } else {
-    root.classList.remove('dark');
-  }
-  localStorage.setItem('theme', mode);
-  updateThemeIcons(mode);
-}
-
-function initTheme() {
-  const stored = localStorage.getItem('theme');
-  setTheme(stored === 'dark' ? 'dark' : 'light');
-}
-
-function updateThemeIcons(mode) {
-  const sun = document.getElementById('icon-sun');
-  const moon = document.getElementById('icon-moon');
-  if (mode === 'dark') {
-    sun.classList.remove('hidden');
-    moon.classList.add('hidden');
-  } else {
-    sun.classList.add('hidden');
-    moon.classList.remove('hidden');
-  }
-}
-
 // Simple toast/snackbar
 function showToast(message) {
   const toast = document.getElementById('toast');
