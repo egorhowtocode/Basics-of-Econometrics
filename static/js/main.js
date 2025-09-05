@@ -42,7 +42,7 @@ const stageInfo = {
   }
 };
 
-let overlay, clipRect, leftLine, rightLine, descPanel;
+let overlay, clipRect, leftLine, rightLine, descPanel, titleEl, textEl;
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('question-form');
@@ -107,7 +107,7 @@ function renderResults(items) {
 
 // Highlight curve segment
 function highlightSegment(seg) {
-  if (!overlay || !clipRect || !leftLine || !rightLine || !descPanel) return;
+  if (!overlay || !clipRect || !leftLine || !rightLine || !descPanel || !titleEl || !textEl) return;
 
   if (!seg || seg === 'none' || !STAGE_RANGES[seg]) {
     overlay.classList.remove('visible');
@@ -115,7 +115,10 @@ function highlightSegment(seg) {
     leftLine.setAttribute('visibility', 'hidden');
     rightLine.setAttribute('visibility', 'hidden');
     descPanel.classList.remove('show');
-    descPanel.innerHTML = "";
+    titleEl.textContent = '';
+    textEl.textContent = '';
+    titleEl.classList.add('invisible');
+    textEl.classList.add('invisible');
     return;
   }
 
@@ -138,10 +141,10 @@ function highlightSegment(seg) {
   rightLine.setAttribute('visibility', 'visible');
 
   const { title, description } = stageInfo[seg];
-  descPanel.innerHTML = `
-    <div class="text-green-500 font-bold text-lg mb-1">${title}</div>
-    <div class="text-green-700">${description}</div>
-  `;
+  titleEl.textContent = title;
+  textEl.textContent = description;
+  titleEl.classList.remove('invisible');
+  textEl.classList.remove('invisible');
   requestAnimationFrame(() => descPanel.classList.add('show'));
 }
 
@@ -162,6 +165,8 @@ function initGartnerCurve() {
   leftLine = document.getElementById('stage-left');
   rightLine = document.getElementById('stage-right');
   descPanel = document.getElementById('stage-description');
+  titleEl = document.getElementById('stage-title');
+  textEl = document.getElementById('stage-text');
 }
 
 // Create a technology card with accordion behavior and animation delay
