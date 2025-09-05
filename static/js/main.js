@@ -139,7 +139,7 @@ function highlightSegment(seg) {
 
   const { title, description } = stageInfo[seg];
   descPanel.innerHTML = `
-    <div class="text-green-500 mb-1">${title}</div>
+    <div class="text-green-500 font-bold text-lg mb-1">${title}</div>
     <div class="text-green-700">${description}</div>
   `;
   requestAnimationFrame(() => descPanel.classList.add('show'));
